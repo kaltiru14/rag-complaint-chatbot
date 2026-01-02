@@ -25,7 +25,7 @@ _Figure 2: Number of Complaints per Product Category_
 
 This highlights that other product categories (Personal loans, Savings accounts, Money transfers) may be underrepresented and should be considered when sampling for embeddings.
 
-**4\. Text Preprocessing**
+## 4\. Text Preprocessing
 --------------------------
 
 To improve embedding quality, all narratives were:
@@ -56,3 +56,59 @@ This dataset will serve as the **foundation for Task 2**, where we will perform 
     
 
 💡 **Next Steps:** Use this cleaned dataset to create **text chunks, generate embeddings, and build a vector store** for the RAG chatbot pipeline in **Task 2**.
+
+# Task 2: Text Chunking, Embedding, and Vector Store Indexing
+
+## Objective
+Prepare the cleaned complaint narratives for semantic search by:
+
+- Sampling a representative subset of complaints.
+- Splitting long narratives into manageable chunks.
+- Generating embeddings for each chunk.
+- Storing embeddings in a vector database with associated metadata.
+
+---
+
+## Sampling Strategy
+- **Dataset:** Cleaned complaints from Task 1 (`filtered_complaints.csv`)
+- **Sample size:** 12,000 complaints
+- **Stratification:** Ensured proportional representation across five product categories: Credit card, Personal loan, Savings account, Checking account, Money transfers
+- **Method:** Stratified sampling to maintain product distribution
+
+---
+
+## Text Chunking
+- **Tool:** `LangChain`'s `RecursiveCharacterTextSplitter`
+- **Parameters:**
+  - Chunk size: 500 characters
+  - Overlap: 50 characters
+- **Purpose:**  
+  Ensures that long narratives are split into meaningful sections while retaining context across chunks
+- **Output:**  
+  - `all_chunks` → list of text chunks  
+  - `metadata` → complaint ID and product for each chunk
+
+---
+
+## Embeddings
+- **Model:** `sentence-transformers/all-MiniLM-L6-v2`
+- **Reasoning:** Lightweight, fast, and good semantic representation for English text
+- **Output:** 384-dimensional embeddings for each text chunk
+
+---
+
+## Vector Store Indexing
+- **Library:** FAISS (`IndexFlatL2`)
+- **Purpose:** Efficient similarity search over all text chunks
+- **Persistence:**  
+  - FAISS index saved at `vector_store/faiss_index.index`  
+  - Metadata saved at `vector_store/metadata.pkl`
+
+---
+
+## Results
+- **Total complaints sampled:** 12,000  
+- **Total text chunks created:** X (replace with actual number)  
+- **Vector store:** Successfully created and persisted, ready for semantic retrieval in Task 3
+
+> This vector store enables efficient retrieval of complaint chunks similar to a given query, forming the foundation for the RAG (Retrieval-Augmented Generation) system in the next task.
