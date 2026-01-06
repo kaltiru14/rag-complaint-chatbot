@@ -32,7 +32,8 @@ def chunk_text(text, chunk_size=500, overlap=50):
 # ------------------------------
 # Load filtered complaints dataset
 # ------------------------------
-df = pd.read_csv("../data/processed/filtered_complaints.csv")
+data_path = r"D:\tenx\week 6\rag-complaint-chatbot\data\processed\filtered_complaints.csv"
+df = pd.read_csv(data_path)
 print(f"Dataset shape: {df.shape}")
 print(df.head())
 
@@ -82,14 +83,28 @@ dim = embeddings.shape[1]
 index = faiss.IndexFlatL2(dim)
 index.add(np.array(embeddings, dtype='float32'))
 
-# Save index and metadata
-os.makedirs("../vector_store", exist_ok=True)
-faiss.write_index(index, "../vector_store/faiss_index.index")
+# ------------------------------
+# Ensure vector_store directory exists
+# ------------------------------
+vector_store_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../vector_store"))
+os.makedirs(vector_store_path, exist_ok=True)
+print(f"Saving vector store files in: {vector_store_path}")
 
-with open("../vector_store/metadata.pkl", "wb") as f:
+# Save FAISS index
+faiss_index_path = os.path.join(vector_store_path, "faiss_index.index")
+faiss.write_index(index, faiss_index_path)
+
+# Save metadata
+metadata_path = os.path.join(vector_store_path, "metadata.pkl")
+with open(metadata_path, "wb") as f:
     pickle.dump(metadata, f)
 
-print("FAISS index and metadata saved in vector_store/")
+# Save all chunks
+chunks_path = os.path.join(vector_store_path, "chunks.pkl")
+with open(chunks_path, "wb") as f:
+    pickle.dump(all_chunks, f)
+
+print("FAISS index, metadata, and chunks.pkl saved successfully.")
 
 # ------------------------------
 # Example retrieval
