@@ -241,3 +241,82 @@ A set of 10 representative questions used to evaluate the pipeline:
 - `rag_evaluation.md`
 
 
+# Task 4: Creating an Interactive Chat Interface
+
+## Objective
+Build a user-friendly interface that allows non-technical users to interact with the RAG system for analyzing CrediTrust customer complaints.
+
+---
+
+## Implementation
+
+### Framework Used
+- **Gradio**: Provides a lightweight web interface for interacting with the RAG system.
+
+### Core Functionality
+The interface includes:
+
+1. **Text Input Box**  
+   - Label: `Ask a question about customer complaints`  
+   - Placeholder: `Type your question here...`  
+   - Users type their questions here.
+
+2. **Ask Button**  
+   - Label: `Ask`  
+   - On click: Sends the user question to the RAG pipeline and returns:
+     - AI-generated answer
+     - Retrieved sources
+
+3. **Clear Button**  
+   - Label: `Clear`  
+   - Resets the question, answer, and retrieved sources boxes.
+
+4. **Answer Display Box**  
+   - Label: `Answer`  
+   - Displays the generated answer from the RAG system.
+   - Non-interactive to prevent editing.
+
+5. **Retrieved Sources Box**  
+   - Label: `Retrieved Sources`  
+   - Shows top text chunks from the knowledge base used to generate the answer.
+   - Increased size to handle long text content for better user verification.
+
+---
+
+## Error Handling
+- Empty input prompts the user to enter a question.
+- Exceptions during query processing are caught, and an error message is displayed in the answer box.
+- Ensures the app does not crash even if RAG fails to return a result.
+
+---
+
+## Example UI
+
+**User Question:**  
+What are common problems with savings accounts?
+
+**Generated Answer:**  
+- The accounts are not functioning as intended.  
+- There are several potential issues related to account management.  
+- Customers have reported difficulties in withdrawing funds or understanding fees.  
+
+**Retrieved Sources:**  
+- [Credit card] the overwhelming stress and sleep disturbances resulting from this issue...
+- [Credit card] tiny interest compared to other banks and accumulated balance issues...
+- [Credit card] long-term frustrations using the accounts for daily expenses...
+
+
+---
+
+## Key Enhancements
+- **Sources Display:** Users can verify answers using top-k retrieved sources.
+- **User Experience:** Clear button resets conversation for multiple queries.
+- **Error Handling:** Provides meaningful messages for empty or failed queries.
+- **Responsive UI:** Textboxes and buttons are organized in rows for better usability.
+
+---
+
+## Deliverables
+- `app.py` script running the Gradio application.
+- Screenshots/GIF of the working interface included in the project report.
+- Ready for deployment or local testing with `python app.py`.
